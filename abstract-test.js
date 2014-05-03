@@ -3,9 +3,7 @@
 
 var test = require('tape')
 
-module.exports = function (run, name) {
-  var basisify = require('./alternative')(run)
-
+module.exports = function (basisify, name) {
   test(name + ' basic', function (t) {
     t.plan(4)
 

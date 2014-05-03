@@ -1,5 +1,5 @@
 var alternative = require('./alternative')
   , test = require('./abstract-test')
 
-test(require('run-parallel'), 'parallelify')
-test(require('run-series'), 'seriesify')
+test(alternative(require('run-parallel')), 'parallelify')
+test(alternative(require('run-series')), 'seriesify')
