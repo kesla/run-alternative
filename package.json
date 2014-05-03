@@ -1,0 +1,25 @@
+{
+  "name": "run-alternative",
+  "version": "1.0.0",
+  "description": "base module for seriesify & parallelify",
+  "main": "alternative.js",
+  "scripts": {
+    "test": "tap test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com:kesla/run-alternative.git"
+  },
+  "author": "David Björklund <david.bjorklund@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "run-parallel": "^1.0.0",
+    "tape": "^2.12.3",
+    "run-series": "^1.0.2"
+  },
+  "dependencies": {},
+  "bugs": {
+    "url": "https://github.com/kesla/run-alternative/issues"
+  },
+  "homepage": "https://github.com/kesla/run-alternative"
+}
