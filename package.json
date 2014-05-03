@@ -1,6 +1,6 @@
 {
   "name": "run-alternative",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "base module for seriesify & parallelify",
   "main": "alternative.js",
   "scripts": {
