@@ -70,4 +70,30 @@ module.exports = function (basisify, name) {
       t.deepEqual(results, { two: 2 })
     })
   })
+
+  test(name + ' nested execution', function (t) {
+    basisify()
+      .add(
+        basisify.named()
+          .add('foo', function (cb) {
+            cb(null, 'bar')
+          })
+          .add('hello', function (cb) {
+            cb(null, 'world')
+          })
+      )
+      .add(
+        basisify()
+          .add(function (cb) {
+            cb(null, 'one')
+          })
+          .add(function (cb) {
+            cb(null, 'two')
+          })
+      )
+      .exec(function (err, data) {
+        t.deepEqual(data, [{ foo: 'bar', hello: 'world' }, [ 'one', 'two' ]])
+        t.end()
+      })
+  })
 }
