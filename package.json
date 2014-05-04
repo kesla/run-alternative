@@ -4,7 +4,7 @@
   "description": "base module for seriesify & parallelify",
   "main": "alternative.js",
   "scripts": {
-    "test": "tap test.js"
+    "test": "tape test.js"
   },
   "repository": {
     "type": "git",
