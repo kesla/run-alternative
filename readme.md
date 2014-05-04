@@ -1,6 +1,6 @@
 # run-alternative[![build status](https://secure.travis-ci.org/kesla/run-alternative.png)](http://travis-ci.org/kesla/run-alternative)
 
-base module for seriesify & parallelify
+base module for [seriesify](https://www.npmjs.org/package/seriesify) & [parallelify](https://www.npmjs.org/package/parallelify)
 
 [![NPM](https://nodei.co/npm/run-alternative.png?downloads&stars)](https://nodei.co/npm/run-alternative/)
 
