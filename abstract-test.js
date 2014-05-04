@@ -96,4 +96,17 @@ module.exports = function (basisify, name) {
         t.end()
       })
   })
+
+  test(name + ' array input', function (t) {
+    var p = basisify([
+        function (cb) { cb (null, 'beep') }
+      , function (cb) { cb (null, 'boop') }
+    ])
+
+    p.add(function (cb) { cb(null, 'woop') })
+    p.exec(function (err, data) {
+      t.deepEqual(data, [ 'beep', 'boop', 'woop' ])
+      t.end()
+    })
+  })
 }

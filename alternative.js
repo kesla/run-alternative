@@ -1,9 +1,10 @@
 module.exports = function (run) {
-  var parallelify = function () {
-        var tasks = []
-          , exec = function (callback) {
+  var parallelify = function (tasks) {
+        var exec = function (callback) {
               run(tasks, callback)
             }
+
+        tasks = tasks || []
 
         exec.add = function (fun) {
           tasks.push(fun)
