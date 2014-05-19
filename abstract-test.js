@@ -4,6 +4,13 @@
 var test = require('tape')
 
 module.exports = function (basisify, name) {
+  var exec = function (p, callback) {
+        if (name === 'concurrentify')
+          p.exec(2, callback)
+        else
+          p.exec(callback)
+      }
+
   test(name + ' basic', function (t) {
     t.plan(4)
 
@@ -24,7 +31,7 @@ module.exports = function (basisify, name) {
       cb(null)
     })
 
-    p.exec(function (err) {
+    exec(p, function (err) {
       t.error(err)
     })
   })
@@ -44,7 +51,7 @@ module.exports = function (basisify, name) {
       cb(null, 2)
     })
 
-    p.exec(function (err, results) {
+    exec(p, function (err, results) {
       t.error(err)
       t.deepEqual(results, [1, 2])
     })
@@ -65,37 +72,40 @@ module.exports = function (basisify, name) {
       cb(null, 2)
     })
 
-    p.exec(function (err, results) {
+    exec(p, function (err, results) {
       t.error(err)
       t.deepEqual(results, { two: 2 })
     })
   })
 
-  test(name + ' nested execution', function (t) {
-    basisify()
-      .add(
-        basisify.named()
-          .add('foo', function (cb) {
-            cb(null, 'bar')
-          })
-          .add('hello', function (cb) {
-            cb(null, 'world')
-          })
+  if (name !== 'concurrentify')
+    test(name + ' nested execution', function (t) {
+      exec(
+          basisify()
+          .add(
+            basisify.named()
+              .add('foo', function (cb) {
+                cb(null, 'bar')
+              })
+              .add('hello', function (cb) {
+                cb(null, 'world')
+              })
+          )
+          .add(
+            basisify()
+              .add(function (cb) {
+                cb(null, 'one')
+              })
+              .add(function (cb) {
+                cb(null, 'two')
+              })
+          )
+        , function (err, data) {
+          t.deepEqual(data, [{ foo: 'bar', hello: 'world' }, [ 'one', 'two' ]])
+          t.end()
+        }
       )
-      .add(
-        basisify()
-          .add(function (cb) {
-            cb(null, 'one')
-          })
-          .add(function (cb) {
-            cb(null, 'two')
-          })
-      )
-      .exec(function (err, data) {
-        t.deepEqual(data, [{ foo: 'bar', hello: 'world' }, [ 'one', 'two' ]])
-        t.end()
-      })
-  })
+    })
 
   test(name + ' array input', function (t) {
     var p = basisify([
@@ -104,7 +114,7 @@ module.exports = function (basisify, name) {
     ])
 
     p.add(function (cb) { cb(null, 'woop') })
-    p.exec(function (err, data) {
+    exec(p, function (err, data) {
       t.deepEqual(data, [ 'beep', 'boop', 'woop' ])
       t.end()
     })

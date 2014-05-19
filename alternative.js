@@ -1,7 +1,10 @@
 module.exports = function (run) {
-  var parallelify = function (tasks) {
-        var exec = function (callback) {
-              run(tasks, callback)
+  var base = function (tasks) {
+        var exec = function (limit, callback) {
+              if (typeof(limit) === 'function')
+                run(tasks, limit)
+              else
+                run(limit, tasks, callback)
             }
 
         tasks = tasks || []
@@ -16,22 +19,30 @@ module.exports = function (run) {
         return exec
       }
 
-  parallelify.named = function () {
+  base.named = function () {
     var tasks = []
       , names = []
-      , exec = function (callback) {
-          run(tasks, function (err, array) {
-            if (err) return callback(err)
+      , exec = function (limit, callback) {
+          var done = function (err, array) {
+                if (err) return callback(err)
 
-            var result = {}
+                var result = {}
 
-            array.forEach(function (data, i) {
-              if (names[i])
-                result[names[i]] = data
-            })
+                array.forEach(function (data, i) {
+                  if (names[i])
+                    result[names[i]] = data
+                })
 
-            callback(null, result)
-          })
+                callback(null, result)
+              }
+
+          if (typeof(limit) === 'function'){
+            callback = limit
+            run(tasks, done)
+          } else {
+            run(limit, tasks, done)
+          }
+
         }
 
     exec.add = function (name, fun) {
@@ -42,6 +53,7 @@ module.exports = function (run) {
 
       names.push(name)
       tasks.push(fun)
+
       return this
     }
 
@@ -50,5 +62,5 @@ module.exports = function (run) {
     return exec
   }
 
-  return parallelify
+  return base
 }
